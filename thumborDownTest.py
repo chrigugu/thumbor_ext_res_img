@@ -19,7 +19,7 @@ import time
 import matplotlib.pyplot as plt
 from itertools import islice
 import cv2
-from pyexiv2 import ImageMetadata
+#from pyexiv2 import ImageMetadata
 import requests
 
 
@@ -162,10 +162,12 @@ def writeImageCVMemory(pil_image, step):
 		# print imSub;
 		# cv2.imwrite( "./test.jpg", cv2.cvtColor(transcol, cv2.COLOR_YCrCb2BGR), [cv2.IMWRITE_JPEG_QUALITY, compression_quality]);
 		# st, buffger = cv2.imencode(".jpg", resized, [cv2.IMWRITE_JPEG_CHROMA_QUALITY, 10, cv2.IMWRITE_JPEG_LUMA_QUALITY, 10, cv2.IMWRITE_JPEG_QUALITY, compression_quality]);
-		st, buffger = cv2.imencode(".jpg", resized, [	cv2.IMWRITE_JPEG_CHROMA_QUALITY, 0
-														,cv2.IMWRITE_JPEG_PROGRESSIVE, 0
-														,cv2.IMWRITE_JPEG_QUALITY, compression_quality 
-														,cv2.IMWRITE_JPEG_OPTIMIZE, 1]); # cv2.IMWRITE_FOURCC('I','4','2','0'),
+		cv2.setUseOptimized(True)
+		st, buffger = cv2.imencode(".jpg", resized, [	#cv2.IMWRITE_JPEG_CHROMA_QUALITY, 0
+														#int(cv2.IMWRITE_JPEG_PROGRESSIVE), 0, 
+														int(cv2.IMWRITE_JPEG_QUALITY), compression_quality#,
+														#int(cv2.IMWRITE_JPEG_OPTIMIZE), 1
+						]); # cv2.IMWRITE_FOURCC('I','4','2','0'),
 		y.append(len(buffger));
 		x.append(i);
 		# f_sampling.write('[%d, %d, "%s", %d],\n' %(i, file_size, ntpath.basename(fname), compression_quality));
@@ -195,22 +197,22 @@ url = "https://www.enterprise.ca/content/dam/ecom/general/Homepage/inspiration-b
 url_arr.append(url)
 url = "https://upload.wikimedia.org/wikipedia/commons/1/1f/Nofretete_Neues_Museum.jpg"
 url_arr.append(url)
-url = "https://www.w3.org/MarkUp/Test/xhtml-print/20050519/tests/jpeg420exif.jpg"
-url_arr.append(url)
-url = "http://freeforumsigs.com/ffs_gallery/albums/batch/shadows%20animal%20wallpapers/animals_(6).jpg" #hang in there
-url_arr.append(url)
-url = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Junonia_lemonias_DSF_upper_by_Kadavoor.JPG" #butterfly
-url_arr.append(url)
-url = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Moon.jpg"
-url_arr.append(url)
-url = "https://upload.wikimedia.org/wikipedia/commons/4/4b/Everest_kalapatthar_crop.jpg"
-url_arr.append(url)
-url = "http://www.ustrust.com/publish/content/image/jpeg/GWMOL/panel4-jpg.jpeg"
-url_arr.append(url)
-url = "https://pbs.twimg.com/media/Bm54nBCCYAACwBi.jpg:large"
-url_arr.append(url)
-url = "http://www.bigfoto.com/stones-background.jpg"
-url_arr.append(url)
+#url = "https://www.w3.org/MarkUp/Test/xhtml-print/20050519/tests/jpeg420exif.jpg"
+#url_arr.append(url)
+#url = "http://freeforumsigs.com/ffs_gallery/albums/batch/shadows%20animal%20wallpapers/animals_(6).jpg" #hang in there
+#url_arr.append(url)
+#url = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Junonia_lemonias_DSF_upper_by_Kadavoor.JPG" #butterfly
+#url_arr.append(url)
+#url = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Moon.jpg"
+#url_arr.append(url)
+#url = "https://upload.wikimedia.org/wikipedia/commons/4/4b/Everest_kalapatthar_crop.jpg"
+#url_arr.append(url)
+#url = "http://www.ustrust.com/publish/content/image/jpeg/GWMOL/panel4-jpg.jpeg"
+#url_arr.append(url)
+#url = "https://pbs.twimg.com/media/Bm54nBCCYAACwBi.jpg:large"
+#url_arr.append(url)
+#url = "http://www.bigfoto.com/stones-background.jpg"
+#url_arr.append(url)
 
 url2 = "http://localhost:8888/unsafe/300x0/filters:brightness(10):contrast(30)/https://upload.wikimedia.org/wikipedia/commons/1/1f/Nofretete_Neues_Museum.jpg"
 url_thumbor = "http://localhost:8888/unsafe/"
@@ -218,7 +220,7 @@ url_thumbor = "http://localhost:8888/unsafe/"
 compression_quality = 95
 
 count = 1
-amount_to_show = 9
+amount_to_show = 3
 
 for url in url_arr:
 	if count < amount_to_show:
@@ -228,7 +230,7 @@ for url in url_arr:
 		data = requests.get(url).content
 		img = Image.open(BytesIO(data))
 		width = img.size[0]
-		step = int(width/4);
+		step = int(width/8);
 
 		print "width" + str(width)
 
@@ -243,9 +245,9 @@ for url in url_arr:
 		plt.plot(x,y)
 
 		## Pillow
-		time_start = time.time();
-		writeImageMemory(img, step)
-		print "pil: " + str(time.time() - time_start)
+		#time_start = time.time();
+		#writeImageMemory(img, step)
+		#print "pil: " + str(time.time() - time_start)
 
 		## OpenCV
 		time_start = time.time();
